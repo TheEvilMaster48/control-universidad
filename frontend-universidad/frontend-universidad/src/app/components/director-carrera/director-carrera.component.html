@@ -1,0 +1,220 @@
+<div class="director-container">
+  <div class="container">
+    <div class="header">
+      <button (click)="goBack()" class="btn btn-secondary">← Volver al Dashboard</button>
+      <h1>Gestión de Directores de Carrera</h1>
+      <button (click)="showCreateForm()" class="btn btn-success" *ngIf="!showForm">
+        + Nuevo Director
+      </button>
+    </div>
+
+    <div *ngIf="message" class="alert" [ngClass]="'alert-' + messageType">
+      {{ message }}
+    </div>
+
+    <div *ngIf="loading && !showForm" class="loading">
+      Cargando directores de carrera...
+    </div>
+
+    <!-- Formulario -->
+    <div *ngIf="showForm" class="card form-card">
+      <div class="form-header">
+        <h2>{{ editMode ? 'Editar Director de Carrera' : 'Nuevo Director de Carrera' }}</h2>
+        <button (click)="hideForm()" class="btn btn-secondary">✕</button>
+      </div>
+
+      <form (ngSubmit)="onSubmit()" class="director-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="nombre" class="form-label">Nombre *</label>
+            <input
+              type="text"
+              id="nombre"
+              name="nombre"
+              [(ngModel)]="currentDirector.nombre"
+              class="form-control"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="apellido" class="form-label">Apellido *</label>
+            <input
+              type="text"
+              id="apellido"
+              name="apellido"
+              [(ngModel)]="currentDirector.apellido"
+              class="form-control"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="correo" class="form-label">Correo *</label>
+            <input
+              type="email"
+              id="correo"
+              name="correo"
+              [(ngModel)]="currentDirector.correo"
+              class="form-control"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="codigoDirector" class="form-label">Código Director *</label>
+            <input
+              type="text"
+              id="codigoDirector"
+              name="codigoDirector"
+              [(ngModel)]="currentDirector.codigoDirector"
+              class="form-control"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="carrera" class="form-label">Carrera *</label>
+            <input
+              type="text"
+              id="carrera"
+              name="carrera"
+              [(ngModel)]="currentDirector.carrera"
+              class="form-control"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="facultad" class="form-label">Facultad *</label>
+            <input
+              type="text"
+              id="facultad"
+              name="facultad"
+              [(ngModel)]="currentDirector.facultad"
+              class="form-control"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="titulo" class="form-label">Título</label>
+            <input
+              type="text"
+              id="titulo"
+              name="titulo"
+              [(ngModel)]="currentDirector.titulo"
+              class="form-control"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="telefono" class="form-label">Teléfono</label>
+            <input
+              type="tel"
+              id="telefono"
+              name="telefono"
+              [(ngModel)]="currentDirector.telefono"
+              class="form-control"
+            />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="oficina" class="form-label">Oficina</label>
+            <input
+              type="text"
+              id="oficina"
+              name="oficina"
+              [(ngModel)]="currentDirector.oficina"
+              class="form-control"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="fechaInicio" class="form-label">Fecha de Inicio</label>
+            <input
+              type="date"
+              id="fechaInicio"
+              name="fechaInicio"
+              [(ngModel)]="currentDirector.fechaInicio"
+              class="form-control"
+            />
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" (click)="hideForm()" class="btn btn-secondary">
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="loading">
+            {{ loading ? 'Guardando...' : (editMode ? 'Actualizar' : 'Crear') }}
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Tabla de directores -->
+    <div *ngIf="!showForm" class="card">
+      <div class="table-header">
+        <h2>Lista de Directores de Carrera ({{ directores.length }})</h2>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Apellido</th>
+              <th>Correo</th>
+              <th>Código</th>
+              <th>Carrera</th>
+              <th>Facultad</th>
+              <th>Título</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let director of directores">
+              <td>{{ director.id }}</td>
+              <td>{{ director.nombre }}</td>
+              <td>{{ director.apellido }}</td>
+              <td>{{ director.correo }}</td>
+              <td>{{ director.codigoDirector }}</td>
+              <td>{{ director.carrera }}</td>
+              <td>{{ director.facultad }}</td>
+              <td>{{ director.titulo || 'N/A' }}</td>
+              <td class="actions">
+                <button
+                  (click)="showEditForm(director)"
+                  class="btn btn-primary btn-sm"
+                  title="Editar"
+                >
+                  ✏️
+                </button>
+                <button
+                  (click)="deleteDirector(director.id!)"
+                  class="btn btn-danger btn-sm"
+                  title="Eliminar"
+                >
+                  🗑️
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="directores.length === 0 && !loading">
+              <td colspan="9" class="no-data">No hay directores de carrera registrados</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

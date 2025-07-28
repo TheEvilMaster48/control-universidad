@@ -1,0 +1,220 @@
+<div class="subdecano-container">
+  <div class="container">
+    <div class="header">
+      <button (click)="goBack()" class="btn btn-secondary">← Volver al Dashboard</button>
+      <h1>Gestión de Subdecanos</h1>
+      <button (click)="showCreateForm()" class="btn btn-success" *ngIf="!showForm">
+        + Nuevo Subdecano
+      </button>
+    </div>
+
+    <div *ngIf="message" class="alert" [ngClass]="'alert-' + messageType">
+      {{ message }}
+    </div>
+
+    <div *ngIf="loading && !showForm" class="loading">
+      Cargando subdecanos...
+    </div>
+
+    <!-- Formulario -->
+    <div *ngIf="showForm" class="card form-card">
+      <div class="form-header">
+        <h2>{{ editMode ? 'Editar Subdecano' : 'Nuevo Subdecano' }}</h2>
+        <button (click)="hideForm()" class="btn btn-secondary">✕</button>
+      </div>
+
+      <form (ngSubmit)="onSubmit()" class="subdecano-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="nombre" class="form-label">Nombre *</label>
+            <input
+              type="text"
+              id="nombre"
+              name="nombre"
+              [(ngModel)]="currentSubdecano.nombre"
+              class="form-control"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="apellido" class="form-label">Apellido *</label>
+            <input
+              type="text"
+              id="apellido"
+              name="apellido"
+              [(ngModel)]="currentSubdecano.apellido"
+              class="form-control"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="correo" class="form-label">Correo *</label>
+            <input
+              type="email"
+              id="correo"
+              name="correo"
+              [(ngModel)]="currentSubdecano.correo"
+              class="form-control"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="codigoSubdecano" class="form-label">Código Subdecano *</label>
+            <input
+              type="text"
+              id="codigoSubdecano"
+              name="codigoSubdecano"
+              [(ngModel)]="currentSubdecano.codigoSubdecano"
+              class="form-control"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="facultad" class="form-label">Facultad *</label>
+            <input
+              type="text"
+              id="facultad"
+              name="facultad"
+              [(ngModel)]="currentSubdecano.facultad"
+              class="form-control"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="areaResponsabilidad" class="form-label">Área de Responsabilidad *</label>
+            <input
+              type="text"
+              id="areaResponsabilidad"
+              name="areaResponsabilidad"
+              [(ngModel)]="currentSubdecano.areaResponsabilidad"
+              class="form-control"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="titulo" class="form-label">Título</label>
+            <input
+              type="text"
+              id="titulo"
+              name="titulo"
+              [(ngModel)]="currentSubdecano.titulo"
+              class="form-control"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="telefono" class="form-label">Teléfono</label>
+            <input
+              type="tel"
+              id="telefono"
+              name="telefono"
+              [(ngModel)]="currentSubdecano.telefono"
+              class="form-control"
+            />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="oficina" class="form-label">Oficina</label>
+            <input
+              type="text"
+              id="oficina"
+              name="oficina"
+              [(ngModel)]="currentSubdecano.oficina"
+              class="form-control"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="fechaInicio" class="form-label">Fecha de Inicio</label>
+            <input
+              type="date"
+              id="fechaInicio"
+              name="fechaInicio"
+              [(ngModel)]="currentSubdecano.fechaInicio"
+              class="form-control"
+            />
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" (click)="hideForm()" class="btn btn-secondary">
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="loading">
+            {{ loading ? 'Guardando...' : (editMode ? 'Actualizar' : 'Crear') }}
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Tabla de subdecanos -->
+    <div *ngIf="!showForm" class="card">
+      <div class="table-header">
+        <h2>Lista de Subdecanos ({{ subdecanos.length }})</h2>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Apellido</th>
+              <th>Correo</th>
+              <th>Código</th>
+              <th>Facultad</th>
+              <th>Área Responsabilidad</th>
+              <th>Título</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let subdecano of subdecanos">
+              <td>{{ subdecano.id }}</td>
+              <td>{{ subdecano.nombre }}</td>
+              <td>{{ subdecano.apellido }}</td>
+              <td>{{ subdecano.correo }}</td>
+              <td>{{ subdecano.codigoSubdecano }}</td>
+              <td>{{ subdecano.facultad }}</td>
+              <td>{{ subdecano.areaResponsabilidad }}</td>
+              <td>{{ subdecano.titulo || 'N/A' }}</td>
+              <td class="actions">
+                <button
+                  (click)="showEditForm(subdecano)"
+                  class="btn btn-primary btn-sm"
+                  title="Editar"
+                >
+                  ✏️
+                </button>
+                <button
+                  (click)="deleteSubdecano(subdecano.id!)"
+                  class="btn btn-danger btn-sm"
+                  title="Eliminar"
+                >
+                  🗑️
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="subdecanos.length === 0 && !loading">
+              <td colspan="9" class="no-data">No hay subdecanos registrados</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

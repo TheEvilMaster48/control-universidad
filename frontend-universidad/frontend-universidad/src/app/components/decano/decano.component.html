@@ -1,0 +1,220 @@
+<div class="decano-container">
+  <div class="container">
+    <div class="header">
+      <button (click)="goBack()" class="btn btn-secondary">← Volver al Dashboard</button>
+      <h1>Gestión de Decanos</h1>
+      <button (click)="showCreateForm()" class="btn btn-success" *ngIf="!showForm">
+        + Nuevo Decano
+      </button>
+    </div>
+
+    <div *ngIf="message" class="alert" [ngClass]="'alert-' + messageType">
+      {{ message }}
+    </div>
+
+    <div *ngIf="loading && !showForm" class="loading">
+      Cargando decanos...
+    </div>
+
+    <!-- Formulario -->
+    <div *ngIf="showForm" class="card form-card">
+      <div class="form-header">
+        <h2>{{ editMode ? 'Editar Decano' : 'Nuevo Decano' }}</h2>
+        <button (click)="hideForm()" class="btn btn-secondary">✕</button>
+      </div>
+
+      <form (ngSubmit)="onSubmit()" class="decano-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="nombre" class="form-label">Nombre *</label>
+            <input
+              type="text"
+              id="nombre"
+              name="nombre"
+              [(ngModel)]="currentDecano.nombre"
+              class="form-control"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="apellido" class="form-label">Apellido *</label>
+            <input
+              type="text"
+              id="apellido"
+              name="apellido"
+              [(ngModel)]="currentDecano.apellido"
+              class="form-control"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="correo" class="form-label">Correo *</label>
+            <input
+              type="email"
+              id="correo"
+              name="correo"
+              [(ngModel)]="currentDecano.correo"
+              class="form-control"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="codigoDecano" class="form-label">Código Decano *</label>
+            <input
+              type="text"
+              id="codigoDecano"
+              name="codigoDecano"
+              [(ngModel)]="currentDecano.codigoDecano"
+              class="form-control"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="facultad" class="form-label">Facultad *</label>
+            <input
+              type="text"
+              id="facultad"
+              name="facultad"
+              [(ngModel)]="currentDecano.facultad"
+              class="form-control"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="titulo" class="form-label">Título</label>
+            <input
+              type="text"
+              id="titulo"
+              name="titulo"
+              [(ngModel)]="currentDecano.titulo"
+              class="form-control"
+            />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="telefono" class="form-label">Teléfono</label>
+            <input
+              type="tel"
+              id="telefono"
+              name="telefono"
+              [(ngModel)]="currentDecano.telefono"
+              class="form-control"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="oficina" class="form-label">Oficina</label>
+            <input
+              type="text"
+              id="oficina"
+              name="oficina"
+              [(ngModel)]="currentDecano.oficina"
+              class="form-control"
+            />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="fechaInicio" class="form-label">Fecha de Inicio</label>
+            <input
+              type="date"
+              id="fechaInicio"
+              name="fechaInicio"
+              [(ngModel)]="currentDecano.fechaInicio"
+              class="form-control"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="experienciaAcademica" class="form-label">Experiencia Académica</label>
+          <textarea
+            id="experienciaAcademica"
+            name="experienciaAcademica"
+            [(ngModel)]="currentDecano.experienciaAcademica"
+            class="form-control"
+            rows="4"
+            placeholder="Describa la experiencia académica del decano..."
+          ></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" (click)="hideForm()" class="btn btn-secondary">
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="loading">
+            {{ loading ? 'Guardando...' : (editMode ? 'Actualizar' : 'Crear') }}
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Tabla de decanos -->
+    <div *ngIf="!showForm" class="card">
+      <div class="table-header">
+        <h2>Lista de Decanos ({{ decanos.length }})</h2>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Apellido</th>
+              <th>Correo</th>
+              <th>Código</th>
+              <th>Facultad</th>
+              <th>Título</th>
+              <th>Fecha Inicio</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let decano of decanos">
+              <td>{{ decano.id }}</td>
+              <td>{{ decano.nombre }}</td>
+              <td>{{ decano.apellido }}</td>
+              <td>{{ decano.correo }}</td>
+              <td>{{ decano.codigoDecano }}</td>
+              <td>{{ decano.facultad }}</td>
+              <td>{{ decano.titulo || 'N/A' }}</td>
+              <td>{{ decano.fechaInicio || 'N/A' }}</td>
+              <td class="actions">
+                <button
+                  (click)="showEditForm(decano)"
+                  class="btn btn-primary btn-sm"
+                  title="Editar"
+                >
+                  ✏️
+                </button>
+                <button
+                  (click)="deleteDecano(decano.id!)"
+                  class="btn btn-danger btn-sm"
+                  title="Eliminar"
+                >
+                  🗑️
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="decanos.length === 0 && !loading">
+              <td colspan="9" class="no-data">No hay decanos registrados</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

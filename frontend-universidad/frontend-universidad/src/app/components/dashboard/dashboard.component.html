@@ -1,0 +1,70 @@
+<div class="dashboard-container">
+  <nav class="navbar">
+    <div class="container">
+      <div class="navbar-content">
+        <a routerLink="/dashboard" class="navbar-brand">Sistema Universitario</a>
+        <div class="navbar-user">
+          <span class="user-info">Bienvenido, {{ currentUser?.usuario }}</span>
+          <button (click)="logout()" class="btn btn-secondary">Cerrar Sesión</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="dashboard-header">
+      <h1>Panel de Administración</h1>
+      <p *ngIf="isAdmin">Gestión completa del sistema universitario</p>
+      <p *ngIf="!isAdmin">Acceso limitado - Solo visualización de perfil</p>
+    </div>
+
+    <div class="dashboard-grid" *ngIf="isAdmin">
+      <div class="dashboard-card">
+        <div class="card-icon">👨‍🎓</div>
+        <h3>Estudiantes</h3>
+        <p>Gestionar información de estudiantes</p>
+        <a routerLink="/estudiantes" class="btn btn-primary">Administrar</a>
+      </div>
+
+      <div class="dashboard-card">
+        <div class="card-icon">👨‍🏫</div>
+        <h3>Profesores</h3>
+        <p>Gestionar información de profesores</p>
+        <a routerLink="/profesores" class="btn btn-primary">Administrar</a>
+      </div>
+
+      <div class="dashboard-card">
+        <div class="card-icon">👨‍💼</div>
+        <h3>Directores de Carrera</h3>
+        <p>Gestionar directores de carrera</p>
+        <a routerLink="/directores-carrera" class="btn btn-primary">Administrar</a>
+      </div>
+
+      <div class="dashboard-card">
+        <div class="card-icon">🎓</div>
+        <h3>Decanos</h3>
+        <p>Gestionar información de decanos</p>
+        <a routerLink="/decanos" class="btn btn-primary">Administrar</a>
+      </div>
+
+      <div class="dashboard-card">
+        <div class="card-icon">📋</div>
+        <h3>Subdecanos</h3>
+        <p>Gestionar información de subdecanos</p>
+        <a routerLink="/subdecanos" class="btn btn-primary">Administrar</a>
+      </div>
+    </div>
+
+    <div class="user-profile" *ngIf="!isAdmin">
+      <div class="card">
+        <h2>Mi Perfil</h2>
+        <div class="profile-info">
+          <p><strong>Usuario:</strong> {{ currentUser?.usuario }}</p>
+          <p><strong>Email:</strong> {{ currentUser?.email }}</p>
+          <p><strong>Rol:</strong> {{ currentUser?.role }}</p>
+        </div>
+        <button class="btn btn-primary">Editar Perfil</button>
+      </div>
+    </div>
+  </div>
+</div>

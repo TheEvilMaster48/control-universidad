@@ -1,0 +1,178 @@
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <h1>Sistema Universitario</h1>
+      <p>{{ showRegister ? 'Crear Cuenta' : 'Iniciar Sesión' }}</p>
+    </div>
+
+    <!-- Formulario de Login -->
+    <form *ngIf="!showRegister" (ngSubmit)="onSubmit()" class="login-form">
+      <div class="form-group">
+        <label for="usuario" class="form-label">Usuario</label>
+        <input
+          type="text"
+          id="usuario"
+          name="usuario"
+          [(ngModel)]="credentials.usuario"
+          class="form-control"
+          placeholder="Ingrese su usuario"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="password" class="form-label">Contraseña</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          [(ngModel)]="credentials.password"
+          class="form-control"
+          placeholder="Ingrese su contraseña"
+          required
+        />
+      </div>
+
+      <div *ngIf="error" class="alert alert-error">
+        {{ error }}
+      </div>
+
+      <div *ngIf="success" class="alert alert-success">
+        {{ success }}
+      </div>
+
+      <button
+        type="submit"
+        class="btn btn-primary btn-login"
+        [disabled]="loading"
+      >
+        <span *ngIf="loading">Iniciando sesión...</span>
+        <span *ngIf="!loading">Iniciar Sesión</span>
+      </button>
+    </form>
+
+    <!-- Formulario de Registro -->
+    <form *ngIf="showRegister" (ngSubmit)="onRegister()" class="login-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="regNombre" class="form-label">Nombre</label>
+          <input
+            type="text"
+            id="regNombre"
+            name="regNombre"
+            [(ngModel)]="registerData.nombre"
+            class="form-control"
+            placeholder="Nombre"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="regApellido" class="form-label">Apellido</label>
+          <input
+            type="text"
+            id="regApellido"
+            name="regApellido"
+            [(ngModel)]="registerData.apellido"
+            class="form-control"
+            placeholder="Apellido"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="regUsuario" class="form-label">Usuario</label>
+        <input
+          type="text"
+          id="regUsuario"
+          name="regUsuario"
+          [(ngModel)]="registerData.usuario"
+          class="form-control"
+          placeholder="Ingrese su usuario"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="regEmail" class="form-label">Email</label>
+        <input
+          type="email"
+          id="regEmail"
+          name="regEmail"
+          [(ngModel)]="registerData.correo"
+          class="form-control"
+          placeholder="Ingrese su email"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="regPassword" class="form-label">Contraseña</label>
+        <input
+          type="password"
+          id="regPassword"
+          name="regPassword"
+          [(ngModel)]="registerData.password"
+          class="form-control"
+          placeholder="Ingrese su contraseña"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="regVerificarPassword" class="form-label">Confirmar Contraseña</label>
+        <input
+          type="password"
+          id="regVerificarPassword"
+          name="regVerificarPassword"
+          [(ngModel)]="registerData.verificarPassword"
+          class="form-control"
+          placeholder="Confirme su contraseña"
+          required
+        />
+      </div>
+
+      <div *ngIf="error" class="alert alert-error">
+        {{ error }}
+      </div>
+
+      <div *ngIf="success" class="alert alert-success">
+        {{ success }}
+      </div>
+
+      <button
+        type="submit"
+        class="btn btn-primary btn-login"
+        [disabled]="loading"
+      >
+        <span *ngIf="loading">Registrando...</span>
+        <span *ngIf="!loading">Registrarse</span>
+      </button>
+    </form>
+
+    <div class="login-footer">
+      <button 
+        type="button" 
+        class="btn btn-secondary btn-toggle"
+        (click)="toggleMode()"
+      >
+        {{ showRegister ? '¿Ya tienes cuenta? Iniciar Sesión' : '¿No tienes cuenta? Registrarse' }}
+      </button>
+      
+      <button 
+        type="button" 
+        class="btn btn-secondary btn-test"
+        (click)="testConnection()"
+      >
+        Probar Conexión Backend (Puerto 3002)
+      </button>
+
+      <div class="credentials-info">
+        <p><strong>Credenciales de prueba:</strong></p>
+        <p><strong>Admin:</strong> admin / admin</p>
+        <p><strong>Backend:</strong> Puerto 3002</p>
+      </div>
+    </div>
+  </div>
+</div>

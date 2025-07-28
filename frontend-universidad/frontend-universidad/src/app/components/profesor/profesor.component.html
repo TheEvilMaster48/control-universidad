@@ -1,0 +1,221 @@
+<div class="profesor-container">
+  <div class="container">
+    <div class="header">
+      <button (click)="goBack()" class="btn btn-secondary">← Volver al Dashboard</button>
+      <h1>Gestión de Profesores</h1>
+      <button (click)="showCreateForm()" class="btn btn-success" *ngIf="!showForm">
+        + Nuevo Profesor
+      </button>
+    </div>
+
+    <div *ngIf="message" class="alert" [ngClass]="'alert-' + messageType">
+      {{ message }}
+    </div>
+
+    <div *ngIf="loading && !showForm" class="loading">
+      Cargando profesores...
+    </div>
+
+    <!-- Formulario -->
+    <div *ngIf="showForm" class="card form-card">
+      <div class="form-header">
+        <h2>{{ editMode ? 'Editar Profesor' : 'Nuevo Profesor' }}</h2>
+        <button (click)="hideForm()" class="btn btn-secondary">✕</button>
+      </div>
+
+      <form (ngSubmit)="onSubmit()" class="profesor-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="nombre" class="form-label">Nombre *</label>
+            <input
+              type="text"
+              id="nombre"
+              name="nombre"
+              [(ngModel)]="currentProfesor.nombre"
+              class="form-control"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="apellido" class="form-label">Apellido *</label>
+            <input
+              type="text"
+              id="apellido"
+              name="apellido"
+              [(ngModel)]="currentProfesor.apellido"
+              class="form-control"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="correo" class="form-label">Correo *</label>
+            <input
+              type="email"
+              id="correo"
+              name="correo"
+              [(ngModel)]="currentProfesor.correo"
+              class="form-control"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="codigoProfesor" class="form-label">Código Profesor *</label>
+            <input
+              type="text"
+              id="codigoProfesor"
+              name="codigoProfesor"
+              [(ngModel)]="currentProfesor.codigoProfesor"
+              class="form-control"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="especialidad" class="form-label">Especialidad *</label>
+            <input
+              type="text"
+              id="especialidad"
+              name="especialidad"
+              [(ngModel)]="currentProfesor.especialidad"
+              class="form-control"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="departamento" class="form-label">Departamento *</label>
+            <input
+              type="text"
+              id="departamento"
+              name="departamento"
+              [(ngModel)]="currentProfesor.departamento"
+              class="form-control"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="titulo" class="form-label">Título</label>
+            <input
+              type="text"
+              id="titulo"
+              name="titulo"
+              [(ngModel)]="currentProfesor.titulo"
+              class="form-control"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="telefono" class="form-label">Teléfono</label>
+            <input
+              type="tel"
+              id="telefono"
+              name="telefono"
+              [(ngModel)]="currentProfesor.telefono"
+              class="form-control"
+            />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="oficina" class="form-label">Oficina</label>
+            <input
+              type="text"
+              id="oficina"
+              name="oficina"
+              [(ngModel)]="currentProfesor.oficina"
+              class="form-control"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="horarioAtencion" class="form-label">Horario de Atención</label>
+            <input
+              type="text"
+              id="horarioAtencion"
+              name="horarioAtencion"
+              [(ngModel)]="currentProfesor.horarioAtencion"
+              class="form-control"
+              placeholder="Ej: Lunes a Viernes 9:00-11:00"
+            />
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" (click)="hideForm()" class="btn btn-secondary">
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="loading">
+            {{ loading ? 'Guardando...' : (editMode ? 'Actualizar' : 'Crear') }}
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Tabla de profesores -->
+    <div *ngIf="!showForm" class="card">
+      <div class="table-header">
+        <h2>Lista de Profesores ({{ profesores.length }})</h2>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Apellido</th>
+              <th>Correo</th>
+              <th>Código</th>
+              <th>Especialidad</th>
+              <th>Departamento</th>
+              <th>Título</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let profesor of profesores">
+              <td>{{ profesor.id }}</td>
+              <td>{{ profesor.nombre }}</td>
+              <td>{{ profesor.apellido }}</td>
+              <td>{{ profesor.correo }}</td>
+              <td>{{ profesor.codigoProfesor }}</td>
+              <td>{{ profesor.especialidad }}</td>
+              <td>{{ profesor.departamento }}</td>
+              <td>{{ profesor.titulo || 'N/A' }}</td>
+              <td class="actions">
+                <button
+                  (click)="showEditForm(profesor)"
+                  class="btn btn-primary btn-sm"
+                  title="Editar"
+                >
+                  ✏️
+                </button>
+                <button
+                  (click)="deleteProfesor(profesor.id!)"
+                  class="btn btn-danger btn-sm"
+                  title="Eliminar"
+                >
+                  🗑️
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="profesores.length === 0 && !loading">
+              <td colspan="9" class="no-data">No hay profesores registrados</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
