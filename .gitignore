@@ -1,0 +1,5 @@
+# Ignorar caché de Angular
+frontend-universidad/frontend-universidad/.angular/cache/
+
+# Node modules
+**/node_modules/
